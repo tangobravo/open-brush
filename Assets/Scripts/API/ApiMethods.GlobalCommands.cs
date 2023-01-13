@@ -128,6 +128,16 @@ namespace TiltBrush
             );
         }
 
+        [ApiEndpoint("merge.user", "Merges strokes from the sketch in the user's sketch folder given an index (0 being most recent)")]
+        public static void MergeUser(int slot)
+        {
+            SketchControlsScript.m_Instance.IssueGlobalCommand(
+                SketchControlsScript.GlobalCommands.MergeBrushStrokes,
+                slot,
+                0
+            );
+        }
+
         [ApiEndpoint("new", "Clears the current sketch")]
         public static void NewSketch()
         {
