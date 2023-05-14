@@ -354,9 +354,19 @@ namespace TiltBrush
         private void PopulateApi()
         {
             endpoints = new Dictionary<string, ApiEndpoint>();
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(t => t.GetTypes())
-                .Where(t => t.IsClass && t.Namespace == "TiltBrush");
+            
+            var types = new List<Type>();
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    types.AddRange(assembly.GetTypes().Where(t => t.IsClass && t.Namespace == "TiltBrush"));
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    types.AddRange(ex.Types.Where(t => t != null && t.IsClass && t.Namespace == "TiltBrush"));
+                }
+            }
 
             foreach (var type in types)
             {

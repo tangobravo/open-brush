@@ -861,7 +861,7 @@ PlayerSettings:
     Android: TILT_BRUSH
     Standalone: TILT_BRUSH;LATK_SUPPORTED
     Windows Store Apps: USD_SUPPORTED;UNITY_HAS_GOOGLEVR;TILT_BRUSH
-    iPhone: TILT_BRUSH
+    iPhone: TILT_BRUSH;IOS
   additionalCompilerArguments: {}
   platformArchitecture:
     iPhone: 1

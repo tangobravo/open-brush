@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TiltBrush
@@ -100,7 +101,11 @@ namespace TiltBrush
             m_Normals = new Vector3[m_NumVerts];
             m_UVs = new Vector2[m_NumVerts];
             m_UVWs = new List<Vector3>();
+#if IOS
+            m_UVWs = Enumerable.Repeat(Vector3.zero, m_NumVerts).ToList();
+#else
             m_UVWs.SetCount(m_NumVerts);
+#endif
             m_Colors = new Color32[m_NumVerts];
             m_Tangents = new Vector4[m_NumVerts];
 

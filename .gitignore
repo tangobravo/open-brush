@@ -4,7 +4,7 @@
 /Build/
 /Library/
 /Logs/
-
+/Buiild*
 # Automatically created by Support/ tools (builds, analyze_refgraph, etc)
 /Support/tmp_steam/
 /Support/refgraph.pickle
@@ -104,3 +104,5 @@ Packages/com.unity.xr.picoxr
 
 # Cache files
 *.cache
+Build_Intel/*
+Intel1/*
