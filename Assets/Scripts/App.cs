@@ -619,7 +619,7 @@ namespace TiltBrush
                 m_RoomRadius = Mathf.Min(Mathf.Abs(extents.x), Mathf.Abs(extents.z));
             }
 
-#if USD_SUPPORTED
+#if USD_SUPPORTED && !PLATFORM_STANDALONE_OSX
             // Load the Usd Plugins
             InitUsd.Initialize();
 #endif
