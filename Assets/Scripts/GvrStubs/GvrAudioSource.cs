@@ -4,40 +4,40 @@ using UnityEngine.Audio;
 
 public class GvrAudioSource : MonoBehaviour
 {
-    public void Awake()
-    {
-        if (GetComponent<ResonanceAudioSource>() != null) return;
-        var resAudioSource = gameObject.AddComponent<ResonanceAudioSource>();
-        var audioSource = gameObject.GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-        
-        audioSource.bypassEffects = bypassRoomEffects;
-        audioSource.bypassListenerEffects = bypassRoomEffects;
-        resAudioSource.directivityAlpha = directivityAlpha;
-        resAudioSource.directivitySharpness = directivitySharpness;
-        resAudioSource.listenerDirectivityAlpha = listenerDirectivityAlpha;
-        resAudioSource.listenerDirectivitySharpness = listenerDirectivitySharpness;
-        resAudioSource.gainDb = gainDb;
-        resAudioSource.occlusionEnabled = occlusionEnabled;
-        audioSource.playOnAwake = playOnAwake;
-        // resAudioSource.disableOnStop = disableOnStop;
-        audioSource.clip = sourceClip;
-        audioSource.loop = sourceLoop;
-        audioSource.mute = sourceMute;
-        audioSource.pitch = sourcePitch;
-        audioSource.priority = sourcePriority;
-        audioSource.spatialBlend = sourceSpatialBlend;
-        audioSource.dopplerLevel = sourceDopplerLevel;
-        audioSource.spread = sourceSpread;
-        audioSource.volume = sourceVolume;
-        audioSource.rolloffMode = sourceRolloffMode;
-        audioSource.maxDistance = sourceMaxDistance;
-        audioSource.minDistance = sourceMinDistance;
-        // resAudioSource.hrtfEnabled = hrtfEnabled;
-    }
+    // public void Awake()
+    // {
+    //     if (GetComponent<ResonanceAudioSource>() != null) return;
+    //     var resAudioSource = gameObject.AddComponent<ResonanceAudioSource>();
+    //     var audioSource = gameObject.GetComponent<AudioSource>();
+    //     if (audioSource == null)
+    //     {
+    //         audioSource = gameObject.AddComponent<AudioSource>();
+    //     }
+    //     
+    //     audioSource.bypassEffects = bypassRoomEffects;
+    //     audioSource.bypassListenerEffects = bypassRoomEffects;
+    //     resAudioSource.directivityAlpha = directivityAlpha;
+    //     resAudioSource.directivitySharpness = directivitySharpness;
+    //     resAudioSource.listenerDirectivityAlpha = listenerDirectivityAlpha;
+    //     resAudioSource.listenerDirectivitySharpness = listenerDirectivitySharpness;
+    //     resAudioSource.gainDb = gainDb;
+    //     resAudioSource.occlusionEnabled = occlusionEnabled;
+    //     audioSource.playOnAwake = playOnAwake;
+    //     // resAudioSource.disableOnStop = disableOnStop;
+    //     audioSource.clip = sourceClip;
+    //     audioSource.loop = sourceLoop;
+    //     audioSource.mute = sourceMute;
+    //     audioSource.pitch = sourcePitch;
+    //     audioSource.priority = sourcePriority;
+    //     audioSource.spatialBlend = sourceSpatialBlend;
+    //     audioSource.dopplerLevel = sourceDopplerLevel;
+    //     audioSource.spread = sourceSpread;
+    //     audioSource.volume = sourceVolume;
+    //     audioSource.rolloffMode = sourceRolloffMode;
+    //     audioSource.maxDistance = sourceMaxDistance;
+    //     audioSource.minDistance = sourceMinDistance;
+    //     // resAudioSource.hrtfEnabled = hrtfEnabled;
+    // }
 
     /// Denotes whether the room effects should be bypassed.
     public bool bypassRoomEffects = false;
@@ -107,4 +107,15 @@ public class GvrAudioSource : MonoBehaviour
     // Unity audio source attached to the game object.
     public AudioSource audioSource = null;
 
+    public bool loop { get; set; }
+    public float volume { get; set; }
+    public float spatialBlend { get; set; }
+    public AudioClip clip { get; set; }
+    public float pitch { get; set; }
+    public void Play()
+    {
+    }
+    public void Stop()
+    {
+    }
 }
