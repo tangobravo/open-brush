@@ -1765,7 +1765,7 @@ namespace TiltBrush
             }
         }
 
-        public void CreateFailedToDetectVrDialog(string msg = null)
+        public void CreateFailedToDetectVrDialog(string msg = null, bool allowViewing = true)
         {
             GameObject dialog = Instantiate(m_ErrorDialog);
             var textXf = dialog.transform.Find("Text");
@@ -1776,6 +1776,8 @@ namespace TiltBrush
             }
             textMesh.text = string.Format(@"        Tiltasaurus says...
                    {0}", msg);
+            var initScript = dialog.GetComponent<InitNoHeadsetMode>();
+            initScript.ShowSketchSelectorUi(allowViewing && !StartupError);
         }
 
         static public bool AppAllowsCreation()
@@ -1878,7 +1880,10 @@ namespace TiltBrush
             if (!Path.IsPathRooted(m_UserPath))
             {
                 StartupError = true;
-                CreateFailedToDetectVrDialog("Failed to find Documents folder.\nIn Windows, try modifying your Controlled Folder Access settings.");
+                CreateFailedToDetectVrDialog(
+                    "Failed to find Documents folder.\nIn Windows, try modifying your Controlled Folder Access settings.",
+                    allowViewing: false
+                );
             }
         }
 
