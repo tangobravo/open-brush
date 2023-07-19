@@ -149,7 +149,8 @@ namespace TiltBrush
             SymmetryTwoHanded = 6003,
             OpenColorOptionsPopup = 7000,
             ChangeSnapAngle = 8000,
-            MergeBrushStrokes = 10000
+            MergeBrushStrokes = 10000,
+            RepaintOptions = 11500,
         }
 
         public enum ControlsType
@@ -4528,7 +4529,10 @@ namespace TiltBrush
                     {
                         var sketchSetType = (SketchSetType)iParam2;
                         SketchSet sketchSet = SketchCatalog.m_Instance.GetSet(sketchSetType);
-                        sketchSet.RenameSketch(iParam1, KeyboardPopUpWindow.m_LastInput);
+                        if (sketchSetType == SketchSetType.User)
+                        {
+                            sketchSet.RenameSketch(iParam1, KeyboardPopUpWindow.m_LastInput);
+                        }
                         DismissPopupOnCurrentGazeObject(false);
                         break;
                     }
@@ -4912,6 +4916,7 @@ namespace TiltBrush
                     // TODO refactor code above to use this method
                     OpenUrl($"http://localhost:{App.HttpServer.HttpPort}/examplescripts");
                     break;
+                case GlobalCommands.RepaintOptions: break; // Intentionally blank.
                 case GlobalCommands.Null: break; // Intentionally blank.
                 default:
                     Debug.LogError($"Unrecognized command {rEnum}");
