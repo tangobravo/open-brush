@@ -6,32 +6,37 @@ public class GvrAudioSource : MonoBehaviour
 {
     public void Awake()
     {
-        // if (GetComponent<AudioSource>() != null) return;
-        // var audioSource = gameObject.AddComponent<AudioSource>();
-        //
-        // audioSource.bypassEffects = bypassRoomEffects;
-        // audioSource. = directivityAlpha;
-        // audioSource.directivitySharpness = directivitySharpness;
-        // audioSource.listenerDirectivityAlpha = listenerDirectivityAlpha;
-        // audioSource.listenerDirectivitySharpness = listenerDirectivitySharpness;
-        // audioSource.gainDb = gainDb;
-        // audioSource.occlusionEnabled = occlusionEnabled;
-        // audioSource.playOnAwake = playOnAwake;
-        // audioSource.disableOnStop = disableOnStop;
-        // audioSource.sourceClip = sourceClip;
-        // audioSource.sourceLoop = sourceLoop;
-        // audioSource.sourceMute = sourceMute;
-        // audioSource.sourcePitch = sourcePitch;
-        // audioSource.sourcePriority = sourcePriority;
-        // audioSource.sourceSpatialBlend = sourceSpatialBlend;
-        // audioSource.sourceDopplerLevel = sourceDopplerLevel;
-        // audioSource.sourceSpread = sourceSpread;
-        // audioSource.sourceVolume = sourceVolume;
-        // audioSource.sourceRolloffMode = sourceRolloffMode;
-        // audioSource.sourceMaxDistance = sourceMaxDistance;
-        // audioSource.sourceMinDistance = sourceMinDistance;
-        // audioSource.hrtfEnabled = hrtfEnabled;
-        // audioSource.audioSource = audioSource;
+        if (GetComponent<ResonanceAudioSource>() != null) return;
+        var resAudioSource = gameObject.AddComponent<ResonanceAudioSource>();
+        var audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        audioSource.bypassEffects = bypassRoomEffects;
+        audioSource.bypassListenerEffects = bypassRoomEffects;
+        resAudioSource.directivityAlpha = directivityAlpha;
+        resAudioSource.directivitySharpness = directivitySharpness;
+        resAudioSource.listenerDirectivityAlpha = listenerDirectivityAlpha;
+        resAudioSource.listenerDirectivitySharpness = listenerDirectivitySharpness;
+        resAudioSource.gainDb = gainDb;
+        resAudioSource.occlusionEnabled = occlusionEnabled;
+        audioSource.playOnAwake = playOnAwake;
+        // resAudioSource.disableOnStop = disableOnStop;
+        audioSource.clip = sourceClip;
+        audioSource.loop = sourceLoop;
+        audioSource.mute = sourceMute;
+        audioSource.pitch = sourcePitch;
+        audioSource.priority = sourcePriority;
+        audioSource.spatialBlend = sourceSpatialBlend;
+        audioSource.dopplerLevel = sourceDopplerLevel;
+        audioSource.spread = sourceSpread;
+        audioSource.volume = sourceVolume;
+        audioSource.rolloffMode = sourceRolloffMode;
+        audioSource.maxDistance = sourceMaxDistance;
+        audioSource.minDistance = sourceMinDistance;
+        // resAudioSource.hrtfEnabled = hrtfEnabled;
     }
 
     /// Denotes whether the room effects should be bypassed.
