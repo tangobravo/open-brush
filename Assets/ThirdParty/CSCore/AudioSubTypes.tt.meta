@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/ThirdParty/CSCore/AudioSubTypes.tt.meta
 guid: e8af88508e2e44591bce504a567691f4
+========
+guid: d56c21cc57157c2478f26e48049b0ac6
+folderAsset: yes
+>>>>>>>> feature/mac-editor-fixes:Assets/Resources/DefaultBackgroundImages.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

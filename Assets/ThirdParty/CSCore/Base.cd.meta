@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/ThirdParty/CSCore/Base.cd.meta
 guid: 14f60d765afe7494995453ff0cad6418
 DefaultImporter:
+========
+guid: f06b3c682c8d97e4ca9a3b16561d7151
+TextScriptImporter:
+>>>>>>>> feature/mac-editor-fixes:Assets/Resources/DefaultBackgroundImages/ATTRIBUTION.txt.bytes.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
