@@ -25,6 +25,16 @@
       "dependencies": {},
       "hash": "85891599eb66651704ae81d09d72a68745a71ce9"
     },
+    "com.google.xr.cardboard": {
+      "version": "1.20.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.xr.management": "3.2.9",
+        "com.unity.xr.legacyinputhelpers": "2.1.4"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.ixxy.unitysymmetry": {
       "version": "https://github.com/IxxyXR/unity-symmetry.git?nocache=7#upm",
       "depth": 0,
