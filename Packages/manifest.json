@@ -94,25 +94,6 @@
         "com.nition.unity-octree",
         "com.openupm",
         "com.syomus.proceduraltoolkit"
-    "com.meta.xr.sdk.utilities": "https://github.com/icosa-mirror/com.meta.xr.sdk.utilities.git#open-brush",
-    "com.ixxy.unitysymmetry": "https://github.com/IxxyXR/unity-symmetry.git?nocache=8#upm",
-    "com.ixxy.polyhydra.core": "https://github.com/IxxyXR/polyhydra-core.git?nocache=13#upm",
-    "com.ixxy.unitysymmetry": "https://github.com/IxxyXR/unity-symmetry.git?nocache=7#upm",
-    "com.meta.xr.sdk.platform": "56.0.0-preview",
-    "com.meta.xr.sdk.utilities": "https://github.com/icosa-mirror/com.meta.xr.sdk.core.git#56.0.0-openbrush",
-    "com.unity.nuget.mono-cecil": "1.10.2",
-    "moonsharp": "https://github.com/icosa-mirror/moonsharp-unity-upm.git",
-      ]
-    },
-    {
-      "name": "package.openupm.com",
-      "url": "https://package.openupm.com",
-      "scopes": [
-        "com.atteneder",
-        "com.ixxy.polyhydra.core",
-        "com.nition.unity-octree",
-        "com.openupm",
-        "com.syomus.proceduraltoolkit"
       ]
     }
   ]
