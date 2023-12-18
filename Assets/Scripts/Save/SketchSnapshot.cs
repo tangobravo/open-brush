@@ -95,8 +95,10 @@ namespace TiltBrush
             var strokes = SketchMemoryScript.AllStrokes();
             int numStrokes = SketchMemoryScript.AllStrokesCount();
             m_Strokes = new List<SketchWriter.AdjustedMemoryBrushStroke>(numStrokes);
+            Debug.Log("HELLO");
             foreach (var strokeSnapshot in SketchWriter.EnumerateAdjustedSnapshots(strokes))
             {
+                Debug.Log("STROKE HERE");
                 if (stopwatch.ElapsedTicks > maxTicks)
                 {
                     stopwatch.Reset();
@@ -141,6 +143,7 @@ namespace TiltBrush
                 CameraPaths = MetadataUtils.GetCameraPaths(),
                 Layers = MetadataUtils.GetLayers(),
                 EditableModelDefinitions = MetadataUtils.GetEditableModelDefinitions(),
+                AnimationTracks = MetadataUtils.GetAnimationTracks(),
                 SchemaVersion = SketchMetadata.kSchemaVersion,
                 ApplicationName = App.kAppDisplayName,
                 ApplicationVersion = App.Config.m_VersionNumber,
@@ -238,6 +241,7 @@ namespace TiltBrush
                     List<Guid> brushGuids;
                     using (var stream = tiltWriter.GetWriteStream(TiltFile.FN_SKETCH))
                     {
+                        Console.WriteLine("WRITE DATA ");
                         SketchWriter.WriteMemory(stream, m_Strokes, m_GroupIdMapping, out brushGuids);
                     }
                     m_Metadata.BrushIndex = brushGuids.Select(GetForcePrecededBy).ToArray();
@@ -245,6 +249,7 @@ namespace TiltBrush
                     using (var jsonWriter = new CustomJsonWriter(new StreamWriter(
                         tiltWriter.GetWriteStream(TiltFile.FN_METADATA))))
                     {
+                        Console.WriteLine("WRITE JSON ");
                         m_JsonSerializer.Serialize(jsonWriter, m_Metadata);
                     }
 

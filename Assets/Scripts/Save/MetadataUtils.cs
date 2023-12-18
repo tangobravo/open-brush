@@ -27,7 +27,7 @@ namespace TiltBrush
             public bool pinned;
             public bool tinted;
             public uint groupId;
-            public int layerId;
+            public (int,int) canvasId;
             public bool twoSided;
         }
 
@@ -90,15 +90,23 @@ namespace TiltBrush
 
         public static CameraPathMetadata[] GetCameraPaths()
         {
-            return WidgetManager.m_Instance.CameraPathWidgets
+            return WidgetManager.m_Instance.AllPathWidgets
                 .Where(cpw => cpw.WidgetScript.ShouldSerialize())
                 .Select(cpw => cpw.WidgetScript.AsSerializable())
                 .ToArray();
         }
 
+
+
+
         public static LayerMetadata[] GetLayers()
         {
             return App.Scene.LayerCanvasesSerialized();
+        }
+
+        public static AnimationMetadata GetAnimationTracks()
+        {
+            return App.Scene.AnimationTracksSerialized();
         }
 
         public static TiltModels75[] GetTiltModels(GroupIdMapping groupIdMapping)
@@ -123,7 +131,7 @@ namespace TiltBrush
                 newEntry.xf = widget.GetSaveTransform();
                 newEntry.pinned = widget.Pinned;
                 newEntry.groupId = groupIdMapping.GetId(widget.Group);
-                newEntry.layerId = App.Scene.GetIndexOfCanvas(widget.Canvas);
+                newEntry.canvasId = App.Scene.GetIndexOfCanvas(widget.Canvas);
                 modelLocationMap[widget.Model.GetLocation()].Add(newEntry);
             }
 
@@ -140,13 +148,13 @@ namespace TiltBrush
                 val.PinStates = new bool[ordered.Length];
                 val.RawTransforms = new TrTransform[ordered.Length];
                 val.GroupIds = new uint[ordered.Length];
-                val.LayerIds = new int[ordered.Length];
+                val.CanvasIds = new (int,int)[ordered.Length];
                 for (int i = 0; i < ordered.Length; ++i)
                 {
                     val.PinStates[i] = ordered[i].pinned;
                     val.RawTransforms[i] = ordered[i].xf;
                     val.GroupIds[i] = ordered[i].groupId;
-                    val.LayerIds[i] = ordered[i].layerId;
+                    val.CanvasIds[i] = ordered[i].canvasId;
                 }
                 models.Add(val);
             }
@@ -235,7 +243,7 @@ namespace TiltBrush
                     Pinned = widget.Pinned,
                     Transform = widget.SaveTransform,
                     GroupId = groupIdMapping.GetId(widget.Group),
-                    LayerId = App.Scene.GetIndexOfCanvas(widget.Canvas),
+                    CanvasId = App.Scene.GetIndexOfCanvas(widget.Canvas),
                     TwoSided = widget.TwoSided
                 };
                 if (widget.VideoController != null)
@@ -309,7 +317,7 @@ namespace TiltBrush
                 newEntry.pinned = image.Pinned;
                 newEntry.tinted = image.UseLegacyTint;
                 newEntry.groupId = groupIdMapping.GetId(image.Group);
-                newEntry.layerId = App.Scene.GetIndexOfCanvas(image.Canvas);
+                newEntry.canvasId = App.Scene.GetIndexOfCanvas(image.Canvas);
                 newEntry.twoSided = image.TwoSided;
                 imagesByFileName[fileName].Add(newEntry);
             }
@@ -331,7 +339,7 @@ namespace TiltBrush
                 val.TintStates = new bool[ordered.Length];
                 val.Transforms = new TrTransform[ordered.Length];
                 val.GroupIds = new uint[ordered.Length];
-                val.LayerIds = new int[ordered.Length];
+                val.CanvasIds = new (int,int)[ordered.Length];
                 val.TwoSidedFlags = new bool[ordered.Length];
                 for (int i = 0; i < ordered.Length; ++i)
                 {
@@ -339,7 +347,7 @@ namespace TiltBrush
                     val.TintStates[i] = ordered[i].tinted;
                     val.Transforms[i] = ordered[i].xf;
                     val.GroupIds[i] = ordered[i].groupId;
-                    val.LayerIds[i] = ordered[i].layerId;
+                    val.CanvasIds[i] = ordered[i].canvasId;
                     val.TwoSidedFlags[i] = ordered[i].twoSided;
                 }
                 imageIndex.Add(val);

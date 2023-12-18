@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TiltBrush
 {
@@ -106,12 +107,12 @@ namespace TiltBrush
         [SerializeField] GameObject m_WidgetPinPrefab;
         [SerializeField] ImageWidget m_ImageWidgetPrefab;
         [SerializeField] VideoWidget m_VideoWidgetPrefab;
-        [SerializeField] CameraPathWidget m_CameraPathWidgetPrefab;
-        [SerializeField] private GameObject m_CameraPathPositionKnotPrefab;
-        [SerializeField] private GameObject m_CameraPathRotationKnotPrefab;
-        [SerializeField] private GameObject m_CameraPathSpeedKnotPrefab;
-        [SerializeField] private GameObject m_CameraPathFovKnotPrefab;
-        [SerializeField] private GameObject m_CameraPathKnotSegmentPrefab;
+        [FormerlySerializedAs("m_MovementPathWidgetPrefab")] [SerializeField] CameraPathWidget mCameraPathWidgetPrefab;
+        [FormerlySerializedAs("m_MovementPathPositionKnotPrefab")] [SerializeField] private GameObject mCameraPathPositionKnotPrefab;
+        [FormerlySerializedAs("m_MovementPathRotationKnotPrefab")] [SerializeField] private GameObject mCameraPathRotationKnotPrefab;
+        [FormerlySerializedAs("m_MovementPathSpeedKnotPrefab")] [SerializeField] private GameObject mCameraPathSpeedKnotPrefab;
+        [FormerlySerializedAs("m_MovementPathFovKnotPrefab")] [SerializeField] private GameObject mCameraPathFovKnotPrefab;
+        [FormerlySerializedAs("m_MovementPathKnotSegmentPrefab")] [SerializeField] private GameObject mCameraPathKnotSegmentPrefab;
         [SerializeField] private GrabWidgetHome m_Home;
         [SerializeField] private GameObject m_HomeHintLinePrefab;
         [SerializeField] float m_WidgetSnapAngle = 15.0f;
@@ -331,12 +332,12 @@ namespace TiltBrush
         public EditableModelWidget EditableModelWidgetPrefab { get { return m_EditableModelWidgetPrefab; } }
         public ImageWidget ImageWidgetPrefab { get { return m_ImageWidgetPrefab; } }
         public VideoWidget VideoWidgetPrefab { get { return m_VideoWidgetPrefab; } }
-        public CameraPathWidget CameraPathWidgetPrefab { get { return m_CameraPathWidgetPrefab; } }
-        public GameObject CameraPathPositionKnotPrefab { get { return m_CameraPathPositionKnotPrefab; } }
-        public GameObject CameraPathRotationKnotPrefab { get { return m_CameraPathRotationKnotPrefab; } }
-        public GameObject CameraPathSpeedKnotPrefab { get { return m_CameraPathSpeedKnotPrefab; } }
-        public GameObject CameraPathFovKnotPrefab { get { return m_CameraPathFovKnotPrefab; } }
-        public GameObject CameraPathKnotSegmentPrefab { get { return m_CameraPathKnotSegmentPrefab; } }
+        public CameraPathWidget CameraPathWidgetPrefab { get { return mCameraPathWidgetPrefab; } }
+        public GameObject CameraPathPositionKnotPrefab { get { return mCameraPathPositionKnotPrefab; } }
+        public GameObject CameraPathRotationKnotPrefab { get { return mCameraPathRotationKnotPrefab; } }
+        public GameObject CameraPathSpeedKnotPrefab { get { return mCameraPathSpeedKnotPrefab; } }
+        public GameObject CameraPathFovKnotPrefab { get { return mCameraPathFovKnotPrefab; } }
+        public GameObject CameraPathKnotSegmentPrefab { get { return mCameraPathKnotSegmentPrefab; } }
 
         public IEnumerable<GrabWidgetData> ActiveGrabWidgets
         {
@@ -414,7 +415,14 @@ namespace TiltBrush
         }
 
         public IEnumerable<TypedWidgetData<CameraPathWidget>> CameraPathWidgets =>
-            m_CameraPathWidgets.Where(x => x.m_WidgetObject.activeSelf);
+            m_CameraPathWidgets.Where(x => x.m_WidgetObject.activeSelf && !x.WidgetScript.Path.belongsToAnimation);
+
+        public IEnumerable<TypedWidgetData<CameraPathWidget>> AnimationPathWidgets =>
+            m_CameraPathWidgets.Where(x => x.m_WidgetObject.activeSelf && x.WidgetScript.Path.belongsToAnimation);
+
+        public IEnumerable<TypedWidgetData<CameraPathWidget>> AllPathWidgets =>
+            m_CameraPathWidgets.Where(x => x.m_WidgetObject.activeSelf || x.WidgetScript.Path.belongsToAnimation);
+
 
         public TypedWidgetData<CameraPathWidget> GetCurrentCameraPath() => m_CurrentCameraPath;
 
@@ -488,10 +496,12 @@ namespace TiltBrush
         // have holes.  Use caution when using these methods.
         // The reason we need these methods is because our UI buttons work with SketchControls
         // global commands, which can be modified with generic integer parameters.  In those
-        // cases, we can't pass a CameraPathWidget object.
+        // cases, we can't pass a MovementPathWidget object.
+
+
         public CameraPathWidget GetNthActiveCameraPath(int nth)
         {
-            var activeCameraPathWidgets = m_CameraPathWidgets.Where(x => x.m_WidgetObject.activeSelf);
+            var activeCameraPathWidgets = m_CameraPathWidgets.Where(x => x.m_WidgetObject.activeSelf && !x.WidgetScript.Path.belongsToAnimation);
             foreach (var cpw in activeCameraPathWidgets)
             {
                 if (nth == 0)
@@ -511,13 +521,34 @@ namespace TiltBrush
             return GetNthActiveCameraPath(pathIndex) == m_CurrentCameraPath.WidgetScript;
         }
 
+        public int? GetIndexOfCameraPath(CameraPathWidget path)
+        {
+            int index = 0;
+            for (int i = 0; i < m_CameraPathWidgets.Count; ++i)
+            {
+                if (m_CameraPathWidgets[i].m_WidgetObject.activeSelf && !m_CameraPathWidgets[i].WidgetScript.Path.belongsToAnimation)
+                {
+                    if (m_CameraPathWidgets[i].WidgetScript == path)
+                    {
+                        return index;
+                    }
+                    ++index;
+                }
+            }
+            return null;
+        }
+
         public CameraPathWidget CreatePathWidget()
         {
+            Debug.Log("CREATE PATH WIDGET");
             CreateWidgetCommand command =
-                new CreateWidgetCommand(m_CameraPathWidgetPrefab, TrTransform.identity);
+                new CreateWidgetCommand(mCameraPathWidgetPrefab, TrTransform.identity);
             SketchMemoryScript.m_Instance.PerformAndRecordCommand(command);
             return m_CameraPathWidgets.Last().WidgetScript;
         }
+
+
+
 
         public bool AnyActivePathHasAKnot()
         {
@@ -531,8 +562,21 @@ namespace TiltBrush
             }
             return false;
         }
+         public bool AnyActiveAnimationPathHasAKnot()
+        {
+            var datas = AnimationPathWidgets;
+            foreach (TypedWidgetData<CameraPathWidget> data in datas)
+            {
+                if (data.WidgetScript.Path.NumPositionKnots > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        public void DeleteCameraPath(GrabWidget cameraPathWidgetScript)
+
+        public void CameraMovementPath(GrabWidget cameraPathWidgetScript)
         {
             if (cameraPathWidgetScript != null)
             {
@@ -1154,6 +1198,7 @@ namespace TiltBrush
             }
             else if (generic is CameraPathWidget cpw)
             {
+                Debug.Log("adding to movement path Widget");
                 m_CameraPathWidgets.Add(new TypedWidgetData<CameraPathWidget>(cpw));
             }
             else

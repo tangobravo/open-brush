@@ -4998,7 +4998,7 @@ namespace TiltBrush
                     {
                         var cameraPath = m_WidgetManager.GetCurrentCameraPath();
                         GrabWidget cameraPathWidget = cameraPath == null ? null : cameraPath.m_WidgetScript;
-                        m_WidgetManager.DeleteCameraPath(cameraPathWidget);
+                        m_WidgetManager.CameraMovementPath(cameraPathWidget);
                     }
                     break;
                 case GlobalCommands.RecordCameraPath:

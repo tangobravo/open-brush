@@ -37,7 +37,7 @@ namespace TiltBrush
 
             if (Knot == null)
             {
-                throw new ArgumentException("MovePositionKnotCommand requires CameraPathPositionKnot");
+                throw new ArgumentException("MovePositionKnotCommand requires MovementPathPositionKnot");
             }
             m_StartXf_CS = TrTransform.FromLocalTransform(Knot.transform);
         }
