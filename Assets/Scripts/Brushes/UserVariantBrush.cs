@@ -731,12 +731,12 @@ public class UserVariantBrush
     /// <returns>The possibly-converted object.</returns>
     private static System.Object ConvertStructsToArrays(System.Object obj)
     {
-        if (obj.GetType() == typeof(Vector2))
+        if (obj?.GetType() == typeof(Vector2))
         {
             Vector2 vector = (Vector2)obj;
             obj = new[] { vector.x, vector.y };
         }
-        else if (obj.GetType() == typeof(Color))
+        else if (obj?.GetType() == typeof(Color))
         {
             Color color = (Color)obj;
             obj = new[] { color.r, color.g, color.b, color.a };
