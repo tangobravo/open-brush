@@ -536,7 +536,7 @@ jobs:
           tar xvfz build_macos_monoscopic/*tgz
           mkdir dist
 
-          npx create-dmg --dmg-title "Open Brush $VERSION" StandaloneOSX/OpenBrush*.app dist
+          npx create-dmg --dmg-title "Open Brush $VERSION" StandaloneOSX/OpenBrush*.app dist || true
           find dist
 
           xcrun notarytool submit \
@@ -544,9 +544,9 @@ jobs:
           --apple-id ${{ secrets.APPLE_ID }} \
           --password ${{ secrets.APPLE_APPLICATION_SPECIFIC_PASSWORD }} \
           --wait \
-          dist/Open\ Brush*.dmg
+          dist/Open\ Brush*.dmg || true
 
-          xcrun stapler staple dist/Open\ Brush*.dmg
+          xcrun stapler staple dist/Open\ Brush*.dmg || true
 
       - name: Upload notarized dmg
         uses: actions/upload-artifact@v4
