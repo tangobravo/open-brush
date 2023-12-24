@@ -485,10 +485,10 @@ jobs:
   createdmg:
     name: Createa and Notarize DMG
     needs: [configuration, build]
-    if: |
-      github.event_name == 'push' &&
-      github.repository == 'icosa-foundation/open-brush' &&
-      (github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/v'))
+    #if: |
+      #github.event_name == 'push' &&
+      #github.repository == 'icosa-foundation/open-brush' &&
+      #(github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/v'))
 
     runs-on: macos-latest  # the ovr-platform-util tool is only available for Mac and Windows
     steps:
