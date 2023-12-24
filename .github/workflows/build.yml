@@ -482,9 +482,82 @@ jobs:
           # Some platforms share a cache; it's not a 1:1 mapping of either targetPlatform or vrsdk, so we have a distinct variable for which cache to use
           key: Library_${{ matrix.cache }}_${{ env.UNITY_VERSION }}
 
+  createdmg:
+    name: Createa and Notarize DMG
+    needs: [configuration, build]
+    if: |
+      github.event_name == 'push' &&
+      github.repository == 'icosa-foundation/open-brush' &&
+      (github.ref == 'refs/heads/main' || contains(github.ref, 'refs/tags/v'))
+
+    runs-on: macos-latest  # the ovr-platform-util tool is only available for Mac and Windows
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: MacOS Monoscopic
+          path: build_macos_monoscopic
+
+      # See https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
+      - name: Install the Apple certificate and provisioning profile
+        if: false
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.APPLE_BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.APPLE_BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Create DMG and Notarize
+        env:
+          VERSION: ${{ needs.configuration.outputs.version }}
+        run: |
+          tar xvfz build_macos_monoscopic/*tgz
+          mkdir dist
+
+          npx create-dmg --dmg-title "Open Brush $VERSION" StandaloneOSX/OpenBrush*.app dist
+          find dist
+
+          xcrun notarytool submit \
+          --team-id ${{ secrets.APPLE_TEAM_ID }} \
+          --apple-id ${{ secrets.APPLE_ID }} \
+          --password ${{ secrets.APPLE_APPLICATION_SPECIFIC_PASSWORD }} \
+          --wait \
+          dist/Open\ Brush*.dmg
+
+          xcrun stapler staple dist/Open\ Brush*.dmg
+
+      - name: Upload notarized dmg
+        uses: actions/upload-artifact@v4
+        with:
+          name: MacOS Monoscopic (DMG)
+          path: |
+            dist/Open\ Brush*.dmg
+
   release:
     name: Create Github Release
-    needs: [configuration, build]
+    needs: [configuration, build, createdmg]
     runs-on: ubuntu-latest
     if: |
       github.event_name == 'push' &&
@@ -661,7 +734,7 @@ jobs:
 
   publish_steam:
     name: Publish Steam Release
-    needs: [configuration, build]
+    needs: [configuration, build, createdmg]
     if: |
       github.event_name == 'push' &&
       github.repository == 'icosa-foundation/open-brush' &&
