@@ -639,6 +639,12 @@ jobs:
           name: Android Pico
           path: build_android_pico
 
+      - name: Download Build Artifacts (Mac)
+        uses: actions/download-artifact@v4
+        with:
+          name: MacOS Monoscopic (DMG)
+          path: build_monoscopic_macos
+
       - name: Package Artifacts for release
         env:
           VERSION: ${{ needs.configuration.outputs.version }}
@@ -650,6 +656,7 @@ jobs:
           mv build_windows_openxr/StandaloneWindows64/ releases/OpenBrush_Desktop_$VERSION/
           mv build_windows_rift/StandaloneWindows64/ releases/OpenBrush_Rift_$VERSION/
           mv build_windows_mono/StandaloneWindows64/ releases/OpenBrush_Mono_$VERSION/
+          mv build_monoscopic_macos/*.dmg releases/OpenBrush_Mac_Mono_$VERSION.dmg
           cd releases
           zip -r OpenBrush_Desktop_$VERSION.zip OpenBrush_Desktop_$VERSION/
           zip -r OpenBrush_Rift_$VERSION.zip OpenBrush_Rift_$VERSION/
