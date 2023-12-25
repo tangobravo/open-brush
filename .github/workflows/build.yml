@@ -493,6 +493,13 @@ jobs:
 
     runs-on: macos-latest  # the ovr-platform-util tool is only available for Mac and Windows
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true  # We don't use LFS, but it adds no time, and leave it here in case we do at some point later
+          sparse-checkout: |
+            Support/macos
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -537,7 +544,22 @@ jobs:
           tar xvfz build_macos_monoscopic/*tgz
           mkdir dist
 
-          npx create-dmg --dmg-title "Open Brush $VERSION" StandaloneOSX/OpenBrush*.app dist || true
+          #npx create-dmg --dmg-title "Open Brush $VERSION" StandaloneOSX/OpenBrush*.app dist || true
+
+          set -x
+          find .
+
+          pip install jinjanator
+          export FILENAME=$(basename $(readlink -f StandaloneOSX/OpenBrush*.app))
+
+          cp Support/macos/background.png StandaloneOSX/
+          jinjanate Support/macos/openbrush-dmg.json.j2 > StandaloneOSX/openbrush-dmg.json
+
+          pushd StandaloneOSX/
+
+          npx appdmg openbrush-dmg.json ../dist/Open\ Brush.dmg
+          popd
+
           find dist
 
           xcrun notarytool submit \
@@ -545,16 +567,16 @@ jobs:
           --apple-id ${{ secrets.APPLE_ID }} \
           --password ${{ secrets.APPLE_APPLICATION_SPECIFIC_PASSWORD }} \
           --wait \
-          dist/Open\ Brush*.dmg || true
+          dist/Open\ Brush.dmg || true
 
-          xcrun stapler staple dist/Open\ Brush*.dmg || true
+          xcrun stapler staple dist/Open\ Brush.dmg || true
 
       - name: Upload notarized dmg
         uses: actions/upload-artifact@v4
         with:
           name: MacOS Monoscopic (DMG)
           path: |
-            dist/Open\ Brush*.dmg
+            dist/Open\ Brush.dmg
 
   release:
     name: Create Github Release
