@@ -74,11 +74,10 @@ SubShader {
   };
 
   float _EmissionGain;
-  float _Speed;
-  float _Fade1;
-  float _Spacing;
-  float _Length;
-  float _Fade2;
+
+  uniform float _ClipStart;
+  uniform float _ClipEnd;
+  uniform half _Opacity;
 
   uniform float _ClipStart;
   uniform float _ClipEnd;
@@ -108,8 +107,8 @@ SubShader {
 #else
     IN.tex.x -= GetTime().x*_Speed;
 #endif
-    IN.tex.x = fmod( abs(IN.tex.x),_Spacing);
-    float neon = saturate(pow( _Fade1 * saturate(_Length - IN.tex.x),_Fade2) * audioMultiplier);
+    IN.tex.x = fmod( abs(IN.tex.x),1);
+    float neon = saturate(pow( 10 * saturate(.2 - IN.tex.x),5) * audioMultiplier);
     float4 bloom = bloomColor(IN.color, _EmissionGain);
     float3 n = WorldNormalVector (IN, o.Normal);
     half rim = 1.0 - saturate(dot (normalize(IN.viewDir), n));

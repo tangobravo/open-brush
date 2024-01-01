@@ -117,6 +117,7 @@ namespace TiltBrush
         {
             return m_BuiltinBrushes.ContainsKey(brush.m_Guid);
         }
+        
         public bool IsBrushInLibrary(BrushDescriptor brush)
         {
             return !m_BuiltinBrushes.ContainsKey(brush.m_Guid) &&
