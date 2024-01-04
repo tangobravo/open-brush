@@ -186,8 +186,8 @@ namespace TiltBrush
         /// floating-panel mode doesn't actually _use_ the Wand's pointer, etc.
         private PointerData[] m_Pointers;
 
-        private List<PointerScript> m_RemoteUserPointers;
         private List<PointerScript> m_ScriptedPointers;
+        private List<PointerScript> m_RemoteUserPointers;
         private bool m_InPlaybackMode;
 
         private PointerData m_MainPointerData;
