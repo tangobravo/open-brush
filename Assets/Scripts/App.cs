@@ -497,7 +497,7 @@ namespace TiltBrush
             Physics.autoSimulation = false;
 
             // See if this is the first time
-            HasPlayedBefore = PlayerPrefs.GetInt(kPlayerPrefHasPlayedBefore, 0) == 1;
+            HasPlayedBefore = true; // PlayerPrefs.GetInt(kPlayerPrefHasPlayedBefore, 0) == 1;
 
             // Copy files into Support directory
             CopySupportFiles();

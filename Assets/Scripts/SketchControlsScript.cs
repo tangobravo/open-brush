@@ -3523,6 +3523,8 @@ namespace TiltBrush
         {
             ControllerGeometry geometry = InputManager.GetControllerGeometry(controller);
 
+            // Avoid exception in Zapbox for now
+            return;
             // Start from a clean state
             geometry.ResetAll();
 
