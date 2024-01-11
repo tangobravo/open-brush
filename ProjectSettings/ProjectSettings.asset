@@ -169,7 +169,7 @@ PlayerSettings:
     Tizen: com.yourcompany.yourproduct
     WebGL: com.yourcompany.yourproduct
     Windows Store Apps: com.yourcompany.yourproduct
-    iPhone: foundation.icosa.openbrush
+    iPhone: com.zappar.zapbox.openbrush
     tvOS: com.yourcompany.yourproduct
   buildNumber:
     Standalone: 0
@@ -866,7 +866,7 @@ PlayerSettings:
     Android: TILT_BRUSH
     Standalone: TILT_BRUSH;USD_SUPPORTED;FBX_SUPPORTED;FBXSDK_RUNTIME;LATK_SUPPORTED
     Windows Store Apps: TILT_BRUSH;USD_SUPPORTED
-    iPhone: TILT_BRUSH
+    iPhone: TILT_BRUSH;ZAPBOX_SUPPORTED
   additionalCompilerArguments: {}
   platformArchitecture:
     iPhone: 1
