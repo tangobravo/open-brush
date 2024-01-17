@@ -495,6 +495,7 @@ namespace TiltBrush
                 data.m_Script.EnableDebugViewControlPoints(bMain && m_DebugViewControlPoints);
                 data.m_Script.ChildIndex = i;
                 data.m_UiEnabled = bMain;
+                data.m_Script.EnableRendering(data.m_UiEnabled);
                 m_Pointers[i] = data;
                 if (bMain)
                 {
